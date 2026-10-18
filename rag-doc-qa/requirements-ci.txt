@@ -1,0 +1,12 @@
+# Lighter list used by GitHub Actions. The tests use fake embedders and a fake
+# LLM, so they don't need sentence-transformers, torch or streamlit.
+pypdf
+numpy
+chromadb
+google-genai
+fastapi
+python-multipart
+httpx
+requests
+pytest
+reportlab
