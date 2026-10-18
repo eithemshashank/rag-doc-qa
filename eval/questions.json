@@ -1,0 +1,17 @@
+[
+  {"q": "What is the minimum attendance needed to sit the end-semester exams?", "file": "greenfield_student_handbook.pdf", "page": 1, "expect": [["75"]]},
+  {"q": "How much is the condonation fee for low attendance?", "file": "greenfield_student_handbook.pdf", "page": 1, "expect": [["500"]]},
+  {"q": "How many books can a student borrow from the library, and for how many days?", "file": "greenfield_student_handbook.pdf", "page": 2, "expect": [["4", "four"], ["14", "fourteen"]]},
+  {"q": "How many marks is the end-semester examination out of?", "file": "greenfield_student_handbook.pdf", "page": 3, "expect": [["70"]]},
+  {"q": "What is the revaluation fee per subject?", "file": "greenfield_student_handbook.pdf", "page": 3, "expect": [["750"]]},
+  {"q": "By what time must hostel residents be inside at night?", "file": "greenfield_student_handbook.pdf", "page": 4, "expect": [["9:30", "9.30", "21:30"]]},
+  {"q": "How many days of paid annual leave does an employee get per year?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 1, "expect": [["24", "twenty-four"]]},
+  {"q": "How many days of unused annual leave can be carried forward?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 1, "expect": [["10", "ten"]]},
+  {"q": "On which days do employees have to work from the office?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 2, "expect": [["Tuesday", "Tue"], ["Wednesday", "Wed"], ["Thursday", "Thu"]]},
+  {"q": "How much is the monthly internet stipend for remote work?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 2, "expect": [["1,500", "1500"]]},
+  {"q": "Within how many days must expense claims be submitted?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 3, "expect": [["30", "thirty"]]},
+  {"q": "What is the notice period for a confirmed employee?", "file": "nimbus_leave_and_remote_policy.pdf", "page": 4, "expect": [["60", "sixty"]]},
+  {"q": "Who is the principal of Greenfield Institute?", "answerable": false},
+  {"q": "How many weeks of maternity leave does Nimbus give?", "answerable": false},
+  {"q": "What is the capital of France?", "answerable": false}
+]
