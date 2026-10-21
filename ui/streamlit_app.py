@@ -13,6 +13,34 @@ import streamlit as st
 
 from ui.api_client import ApiClient, ApiError
 
+# EMBEDDED=1 runs everything in this one process (used by the public demo on
+# Streamlit Cloud). Otherwise the page talks to the API over HTTP.
+EMBEDDED = os.getenv("EMBEDDED") == "1"
+SAMPLE_DIR = Path(__file__).resolve().parents[1] / "eval" / "docs"
+
+
+@st.cache_resource(show_spinner="Loading the embedding model (first visit only)...")
+def shared_parts():
+    """Heavy objects shared by all visitors: the embedder and the LLM client."""
+    from app import config
+    from app.embeddings import make_embedder
+    from app.llm import make_llm
+
+    return make_embedder(config.EMBEDDER), make_llm(config.LLM_PROVIDER, config)
+
+
+def get_embedded_client():
+    if "embedded_client" not in st.session_state:
+        from app.factory import build_session_service
+        from ui.local_client import LocalClient
+
+        embedder, llm = shared_parts()
+        st.session_state.embedded_client = LocalClient(
+            build_session_service(embedder, llm),
+            max_questions=int(os.getenv("DEMO_MAX_QUESTIONS", "15")),
+        )
+    return st.session_state.embedded_client
+
 st.set_page_config(page_title="RAG Document Q&A", layout="wide")
 
 if "messages" not in st.session_state:
@@ -33,15 +61,32 @@ def show_sources(sources: list[dict]) -> None:
 # ---------- sidebar: connection, upload, document list ----------
 with st.sidebar:
     st.header("Documents")
-    api_url = st.text_input("API address", os.getenv("API_URL", "http://127.0.0.1:8000"))
-    client = ApiClient(api_url)
-
-    try:
+    if EMBEDDED:
+        try:
+            client = get_embedded_client()
+        except Exception:
+            st.error("The demo could not start (check the API key and settings).")
+            st.stop()
         stats = client.health()
-        st.success(f"API online: {stats['documents']} document(s), {stats['chunks']} chunks")
-    except ApiError as err:
-        st.error(str(err))
-        st.stop()
+        st.success(f"{stats['documents']} document(s), {stats['chunks']} chunks")
+        st.caption(
+            f"Demo: your documents are private to this browser tab and are deleted "
+            f"when you leave. {client.questions_left} question(s) left."
+        )
+        if SAMPLE_DIR.exists() and st.button("Load 2 sample PDFs"):
+            for pdf in sorted(SAMPLE_DIR.glob("*.pdf")):
+                client.upload(pdf.name, pdf.read_bytes())
+            st.rerun()
+    else:
+        api_url = st.text_input("API address", os.getenv("API_URL", "http://127.0.0.1:8000"))
+        client = ApiClient(api_url)
+
+        try:
+            stats = client.health()
+            st.success(f"API online: {stats['documents']} document(s), {stats['chunks']} chunks")
+        except ApiError as err:
+            st.error(str(err))
+            st.stop()
 
     uploads = st.file_uploader("Upload PDFs", type="pdf", accept_multiple_files=True)
     for file in uploads or []:

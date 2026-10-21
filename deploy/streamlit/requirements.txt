@@ -1,0 +1,6 @@
+# Light dependencies for the Streamlit Cloud demo (no PyTorch, no Chroma, no FastAPI).
+pypdf
+numpy
+fastembed
+requests
+streamlit

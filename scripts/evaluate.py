@@ -13,14 +13,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from app import config
-from app.embeddings import SentenceTransformerEmbedder
+from app.embeddings import make_embedder
 from app.evaluation import load_questions, run_eval, summarize, to_markdown
 from app.ingest import ingest_pdf
 from app.llm import make_llm
 from app.retrieval import index_chunks
 from app.vectorstore import InMemoryStore
 
-embedder = SentenceTransformerEmbedder()
+embedder = make_embedder(config.EMBEDDER)
 store = InMemoryStore()
 for pdf in sorted((ROOT / "eval" / "docs").glob("*.pdf")):
     index_chunks(store, embedder, ingest_pdf(pdf))

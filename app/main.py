@@ -22,20 +22,10 @@ class AskRequest(BaseModel):
 
 
 def build_default_service() -> DocumentService:
-    """The real setup: local embeddings, Chroma on disk, the LLM from .env."""
-    from app import config
-    from app.embeddings import SentenceTransformerEmbedder
-    from app.llm import make_llm
-    from app.vectorstore import ChromaStore
+    """The real setup: embeddings, vector store and LLM chosen by .env."""
+    from app.factory import build_default_service as build
 
-    return DocumentService(
-        store=ChromaStore(path=str(config.ROOT / "chroma_db")),
-        embedder=SentenceTransformerEmbedder(),
-        llm=make_llm(config.LLM_PROVIDER, config),
-        upload_dir=config.ROOT / "uploads",
-        k=config.TOP_K,
-        min_score=config.MIN_SCORE,
-    )
+    return build()
 
 
 def create_app(service: DocumentService | None = None) -> FastAPI:

@@ -32,6 +32,36 @@ class SentenceTransformerEmbedder:
         return np.asarray(vectors, dtype=float).tolist()
 
 
+class OnnxEmbedder:
+    """The same all-MiniLM-L6-v2 model, run with ONNX Runtime (via fastembed).
+
+    No PyTorch is needed, so it installs fast and uses far less memory. That is
+    what makes the free Streamlit Cloud deployment possible. The vectors are
+    normalised here so cosine similarity stays a plain dot product.
+    """
+
+    def __init__(self, model_name: str = "sentence-transformers/all-MiniLM-L6-v2"):
+        from fastembed import TextEmbedding  # imported lazily
+
+        self.model = TextEmbedding(model_name=model_name)
+
+    def embed(self, texts: list[str]) -> list[list[float]]:
+        vectors = np.asarray(list(self.model.embed(texts)), dtype=float)
+        norms = np.linalg.norm(vectors, axis=1, keepdims=True)
+        norms[norms == 0] = 1.0
+        return (vectors / norms).tolist()
+
+
+def make_embedder(name: str = "sentence-transformers") -> Embedder:
+    """Pick the embedder named by EMBEDDER in .env: 'sentence-transformers' or 'onnx'."""
+    name = name.lower().strip()
+    if name in ("sentence-transformers", "torch"):
+        return SentenceTransformerEmbedder()
+    if name == "onnx":
+        return OnnxEmbedder()
+    raise ValueError(f"Unknown EMBEDDER '{name}'. Use 'sentence-transformers' or 'onnx'.")
+
+
 class HashingEmbedder:
     """A tiny stand-in embedder used only in tests.
 

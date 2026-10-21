@@ -31,7 +31,7 @@ question --> embed --> find the closest chunks (cosine similarity)
 
 ## Tech stack
 
-Python 3.12 · FastAPI · Streamlit · Chroma · sentence-transformers · pypdf · Gemini / Groq · pytest · GitHub Actions · Docker
+Python 3.12 · FastAPI · Streamlit · Chroma · sentence-transformers / ONNX Runtime · pypdf · Gemini / Groq · pytest · GitHub Actions · Docker
 
 ## Project layout
 
@@ -111,6 +111,17 @@ docker run --env-file .env -p 8501:8501 -v rag-data:/app/chroma_db rag-doc-qa
 
 Then open http://localhost:8501.
 
+## Free public demo (Streamlit Community Cloud)
+
+The Docker version needs PyTorch, which is too big for free hosts. For a public demo the app also runs in a light, single-process mode:
+
+- `EMBEDDER=onnx` runs the same all-MiniLM-L6-v2 model with ONNX Runtime (via fastembed) instead of PyTorch
+- `STORE=memory` keeps each visitor's index in memory, private to their browser tab and deleted when they leave
+- `EMBEDDED=1` makes the Streamlit page call the service directly, so no separate API process is needed
+- The demo allows 15 questions per visit so a public link cannot use up the API key
+
+Entry point: `deploy/streamlit/streamlit_app.py`, with its own light `deploy/streamlit/requirements.txt`. Set `GROQ_API_KEY` in the Streamlit Cloud secrets.
+
 ## Limitations
 
 - Text PDFs only. Scanned PDFs have no text layer and would need OCR.
@@ -120,7 +131,7 @@ Then open http://localhost:8501.
 
 ## Roadmap
 
-- Live deployment
+- Re-run the evaluation with the ONNX embedder and record the result
 
 ## Author
 

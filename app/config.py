@@ -31,6 +31,10 @@ GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-3.8-flash")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
 # Model names change; if Groq says a model is gone, pick a current one from console.groq.com
 GROQ_MODEL = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+# "sentence-transformers" (default, needs PyTorch) or "onnx" (light, for free hosting)
+EMBEDDER = os.getenv("EMBEDDER", "sentence-transformers")
+# "chroma" (saved on disk) or "memory" (lost on restart; used by the public demo)
+STORE = os.getenv("STORE", "chroma")
 TOP_K = int(os.getenv("TOP_K", "4"))
 # Chunks less similar to the question than this are treated as "not relevant".
 MIN_SCORE = float(os.getenv("MIN_SCORE", "0.25"))
