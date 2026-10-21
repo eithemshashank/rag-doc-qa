@@ -2,6 +2,8 @@
 
 Upload PDFs and ask questions in plain language. Answers come **only from your documents** and show the file and page they were found on. If the documents don't contain the answer, the app says so instead of guessing.
 
+**[Try the live demo](https://rag-doc-app-hrwdnx9jwj4jqqkw3bhfxb.streamlit.app)** (free hosting, so the first load can take a minute; 15 questions per visit)
+
 ![Chat page: a question answered with its source page](docs/screenshot.png)
 
 ![tests](https://github.com/eithemshashank/rag-doc-qa/actions/workflows/ci.yml/badge.svg)
@@ -120,7 +122,7 @@ The Docker version needs PyTorch, which is too big for free hosts. For a public 
 - `EMBEDDED=1` makes the Streamlit page call the service directly, so no separate API process is needed
 - The demo allows 15 questions per visit so a public link cannot use up the API key
 
-Entry point: `deploy/streamlit/streamlit_app.py`, with its own light `deploy/streamlit/requirements.txt`. Set `GROQ_API_KEY` in the Streamlit Cloud secrets.
+The live demo runs from this mode. Entry point: `deploy/streamlit/streamlit_app.py`, with its own light `deploy/streamlit/requirements.txt`. Set `GROQ_API_KEY` in the Streamlit Cloud secrets.
 
 ## Limitations
 
@@ -131,7 +133,6 @@ Entry point: `deploy/streamlit/streamlit_app.py`, with its own light `deploy/str
 
 ## Roadmap
 
-- Public demo on Streamlit Community Cloud (code and steps are in `deploy/streamlit/`)
 - Evaluation on larger, messier documents
 
 ## Author
