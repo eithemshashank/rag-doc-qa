@@ -98,7 +98,7 @@ The tests use a fake LLM and a simple hashing embedder, so they run without inte
 | Answer contains the correct facts | 12 / 12 |
 | Refused questions that are not in the documents | 3 / 3 |
 
-Per-question results are in [`eval/results.md`](eval/results.md).
+The same 12 / 12, 12 / 12 and 3 / 3 result was reproduced with the light ONNX embedder (`EMBEDDER=onnx`) used by the public demo, on Windows with Python 3.12, with the Groq `openai/gpt-oss-120b` model.
 
 This is a small, easy test: short documents, one fact per question, and the keyword check only confirms the expected numbers appear in the answer. It shows the pipeline works end to end and that it refuses rather than guesses. It is not a benchmark for large or messy real-world documents.
 
@@ -131,7 +131,8 @@ Entry point: `deploy/streamlit/streamlit_app.py`, with its own light `deploy/str
 
 ## Roadmap
 
-- Re-run the evaluation with the ONNX embedder and record the result
+- Public demo on Streamlit Community Cloud (code and steps are in `deploy/streamlit/`)
+- Evaluation on larger, messier documents
 
 ## Author
 
